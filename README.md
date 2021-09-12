@@ -27,3 +27,7 @@ This function sets the default `completion_threshold` value that `smoof:tween` f
 
 ### So what is this useful for?
 Anything where you want a smooth animation. Perhaps GUI elements sliding in and out of frame to make your game more juicy.
+
+Here's a not so smooth gif of it in action:
+
+![image](https://github.com/veethree/smoof/blob/main/ezgif.com-gif-maker.gif)
