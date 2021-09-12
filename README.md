@@ -30,4 +30,4 @@ Anything where you want a smooth animation. Perhaps GUI elements sliding in and 
 
 Here's a not so smooth gif of it in action:
 
-![image](https://github.com/veethree/smoof/blob/main/ezgif.com-gif-maker.gif)
+![image](https://github.com/veethree/smoof/blob/main/Demo/smoof_demo.gif)
