@@ -1,5 +1,5 @@
 -- Smoof: A tiny tweening library for lua
---
+-- Version 1.0
 --
 -- MIT License
 -- 
@@ -25,10 +25,12 @@
 
 local smoof = {
     stack = {},
+    bind_stack = {},
     default_smoof_value = 10,
-    default_completion_threshold = 1
+    default_completion_threshold = 0.1
 }
 
+-- Checks if an object is already in the stack, And returns every instance of it
 local function in_stack(object) 
     local duplicate = false
     for i,item in ipairs(smoof.stack) do
@@ -43,25 +45,34 @@ local function in_stack(object)
     return duplicate
 end
 
+-- Self explanatory.
 function smoof:setDefaultSmoofValue(val)
     self.default_smoof_value = val
 end
 
+-- Self explanatory.
 function smoof:setCompletionThreshold(threshold)
     self.default_completion_threshold = threshold
 end
 
-function smoof:tween(object, target, smoof_value, completion_threshold)
+-- Starts a new animation
+-- object: A table containing the values you want to animate
+-- target: A table containing the target values. Must have at least one key in common with 'object'
+--         Keys not found in object will be ignored.
+-- smoof_value: How long the animation is. Smaller value means slower animation. Values between 1 & 15 are reasonable
+-- completion_threshold: How close the value needs to get to the target before snapping to it and ending the animation
+-- bind: Boolean, If true, The animation is never removed from the stack, So the values will constantly
+--       animate towards target.
+function smoof:new(object, target, smoof_value, completion_threshold, bind)
     smoof_value = smoof_value or self.default_smoof_value
     completion_threshold = completion_threshold or self.default_completion_threshold
+    bind = bind or false
 
     -- Checking if exists
     local duplicates = in_stack(object)
     local remove_list = {}
     
     -- If object is already in stack, Remove it.
-    -- TODO: Have it check if the new tween has different targets, Then combine them 
-    -- instead of just removing the older one
      if duplicates then
          for _, duplicate in ipairs(duplicates) do
             table.remove(self.stack, duplicate.key)
@@ -73,8 +84,16 @@ function smoof:tween(object, target, smoof_value, completion_threshold)
         object = object,
         target = target,
         smoof_value = smoof_value,
-        completion_threshold = completion_threshold
+        completion_threshold = completion_threshold,
+        bind = bind
     }
+end
+
+function smoof:unbind(object)
+    local items = in_stack(object)
+    for _, item in pairs(items) do
+        table.remove(self.stack, _)
+    end
 end
 
 function smoof:update(dt)
@@ -92,7 +111,9 @@ function smoof:update(dt)
         end
         if finished then
             -- Removing from stack if finished
-            table.remove(self.stack, _)     
+            if not item.bind then
+                table.remove(self.stack, _)
+            end
         end
     end
 end
