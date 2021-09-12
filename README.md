@@ -16,7 +16,7 @@ You need to call this function once per frame. It updates the animation.
 This function starts an animation.
 * object: This needs to be a table, Containing the values you want to tween. Ex: `{x = 0, y = 0}`
 * target: Another table, Containing the target value/s. Ex: `{x = 32, y = 64}`
-* (Optonal) smoof_value: A number that controls the length of the animation. The lower the number, The slower the animation. Values between 5 and 15 are reasonable. If you give it a negative value things get fucky.
+* (Optonal) smoof_value: A number that controls the length of the animation. The lower the number, The faster the animation. Should be in the range of 0 to 1, But not 1. 0.99999... is fine.
 * (Optonal) completion_threshold: This value contols how close to the target the value should get before snapping to it and ending the animation.
 * (Optional) bind: Boolean, If true, The animation will never be removed from the stack (unless you call smoof:unbind()), As a result the object values will constalty animate towards the target.
 
