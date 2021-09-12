@@ -1,5 +1,5 @@
 -- Smoof: A tiny tweening library for lua
--- Version 1.0
+-- Version 1.2
 --
 -- MIT License
 -- 
@@ -26,7 +26,7 @@
 local smoof = {
     stack = {},
     bind_stack = {},
-    default_smoof_value = 10,
+    default_smoof_value = 0.001,
     default_completion_threshold = 0.1
 }
 
@@ -63,10 +63,12 @@ end
 -- completion_threshold: How close the value needs to get to the target before snapping to it and ending the animation
 -- bind: Boolean, If true, The animation is never removed from the stack, So the values will constantly
 --       animate towards target.
-function smoof:new(object, target, smoof_value, completion_threshold, bind)
+-- callback: A table containing one or more of the following functions: onStart, onStep, onArrive
+function smoof:new(object, target, smoof_value, completion_threshold, bind, callback)
     smoof_value = smoof_value or self.default_smoof_value
     completion_threshold = completion_threshold or self.default_completion_threshold
     bind = bind or false
+    callback = callback or {}
 
     -- Checking if exists
     local duplicates = in_stack(object)
@@ -85,8 +87,12 @@ function smoof:new(object, target, smoof_value, completion_threshold, bind)
         target = target,
         smoof_value = smoof_value,
         completion_threshold = completion_threshold,
-        bind = bind
+        bind = bind,
+        callback = callback
     }
+    if type(self.stack[#self.stack].callback["onStart"]) == "function" then
+        self.stack[#self.stack].callback["onStart"](self.stack[#self.stack])
+    end
 end
 
 function smoof:unbind(object)
@@ -101,12 +107,18 @@ function smoof:update(dt)
         local finished = true
         for key,val in pairs(item.target) do
             -- Smoofing
-            item.object[key] = item.object[key] + (val - item.object[key]) * item.smoof_value * dt
+            item.object[key] = item.object[key] + (val - item.object[key]) * (1 - (item.smoof_value ^ dt))
+            if type(item.callback["onStep"]) == "function" then
+                item.callback["onStep"](item)
+            end
             -- Checking if the value is within the threshold
             if math.abs(item.object[key] - val) > item.completion_threshold then
                 finished = false
             else
                 item.object[key] = val
+                if type(item.callback["onArrive"]) == "function" then
+                    item.callback["onArrive"](item)
+                end
             end 
         end
         if finished then

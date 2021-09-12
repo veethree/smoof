@@ -2,6 +2,7 @@ lg = love.graphics
 
 function love.load()
     smoof = require("smoof")
+    love.mouse.setVisible(true)
 
     large = lg.newFont(64)
     small = lg.newFont(32)
@@ -9,7 +10,7 @@ function love.load()
     bg_color = {math.random(), math.random(), math.random()}
 
     particles = {}
-    particle_count = 16
+    particle_count = 32
     for i=1, particle_count do
         particles[i] = {
             x = math.random(lg.getWidth()),
@@ -45,19 +46,29 @@ function love.load()
         alpha = 0
     }
 
+    smoof_mouse = {
+        x = 0,
+        y = 0
+    }
+
     text_alpha = 1
 
     test = {1, 2, 3}
 
     smoof:new(title, {y=32})
-    smoof:new(sub_title, {y = 100}, 8)
-    smoof:new(sub_sub_title, {y = lg.getHeight() - 64}, 5)
+    smoof:new(sub_title, {y = 100}, 0.001)
+    smoof:new(sub_sub_title, {y = lg.getHeight() - 64})
     smoof:new(middle_title, {x = 0}, 5)
+
+    mouse = {x = 0, y = 0}
+
+    smoof:new(smoof_mouse, mouse, 0.001, nil, true)
 
     toggle = false
 end
 
 function love.update(dt)
+    mouse.x, mouse.y = love.mouse.getPosition()
     smoof:update(dt)
     lg.setBackgroundColor(bg_color[1], bg_color[2], bg_color[3])
 end
@@ -82,10 +93,9 @@ function love.draw()
     
     lg.setColor(1-bg_color[1], 1-bg_color[2], 1-bg_color[3], text_alpa)
     lg.printf(middle_title.text, middle_title.x, middle_title.y, lg.getWidth(), "center")
-end
 
-function love.mousepressed(x, y, key)
-    
+    lg.setColor(1, 1, 1, 1)
+    lg.circle("fill", smoof_mouse.x, smoof_mouse.y, 4)
 end
 
 function love.keypressed(key)
@@ -93,25 +103,25 @@ function love.keypressed(key)
     if key == "space" then
         if toggle then
             smoof:new(title, {y=32})
-            smoof:new(sub_title, {y = 100}, 8)
-            smoof:new(sub_sub_title, {y = lg.getHeight() - 64}, 5)
-            smoof:new(circle, {radius = 0, alpha = 0}, 10, 0.1)
+            smoof:new(sub_title, {y = 100}, 0.001)
+            smoof:new(sub_sub_title, {y = lg.getHeight() - 64})
+            smoof:new(circle, {radius = 0, alpha = 0},0.00001, 0.1)
             smoof:new(_G, {text_alpha = 1}, 10, 0.01)
-            smoof:new(middle_title, {x = 0}, 5)
+            smoof:new(middle_title, {x = 0}, 0.005)
         else
             smoof:new(title, {y=-64})
-            smoof:new(sub_title, {y=-64}, 8)
-            smoof:new(sub_sub_title, {y = lg.getHeight()}, 5)
-            smoof:new(circle, {radius = lg.getWidth() / 1.5, alpha = 0.5}, 10, 0.1)
+            smoof:new(sub_title, {y=-64}, 0.001)
+            smoof:new(sub_sub_title, {y = lg.getHeight()})
+            smoof:new(circle, {radius = lg.getWidth() / 1.5, alpha = 0.5}, 0.00001, 0.1)
             smoof:new(_G, {text_alpha = 0}, 10, 0.01)
-            smoof:new(middle_title, {x = -lg.getWidth()}, 5)
+            smoof:new(middle_title, {x = -lg.getWidth()}, 0.005)
         end
         toggle = not toggle
 
-        smoof:new(bg_color, {math.random(), math.random(), math.random()}, 5, 0.01)
+        smoof:new(bg_color, {math.random(), math.random(), math.random()}, 0.01, 0.01)
 
         for i,v in ipairs(particles) do
-            smoof:new(v, {x = math.random(lg.getWidth()), y = math.random(lg.getHeight()), rad = math.random(8, 32)}, 2)
+            smoof:new(v, {x = math.random(lg.getWidth()), y = math.random(lg.getHeight()), rad = math.random(8, 32)}, 0.1)
         end
     end
 end
