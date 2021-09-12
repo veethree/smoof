@@ -1,10 +1,7 @@
 # smoof.lua
 
 A tiny tweening library for lua.
-It's basically this function wrapped up in a library:
-```
-value = value + (target - value) * smoothing
-```
+It's basically linear interpolation wrapped up in a library.
 
 ## Usage
 
@@ -33,6 +30,8 @@ This function sets the default `completion_threshold` value that `smoof:tween` f
 ### So what is this useful for?
 Anything where you want a smooth animation. Perhaps GUI elements sliding in and out of frame to make your game more juicy.
 
-Here's a not so smooth gif of it in action:
+Here's a gif of it in action. 
 
 ![image](https://github.com/veethree/smoof/blob/main/Demo/smoof_demo.gif)
+
+The demo is made in [löve](https://love2d.org/). 
