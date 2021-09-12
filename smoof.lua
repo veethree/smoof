@@ -1,5 +1,5 @@
 -- Smoof: A tiny tweening library for lua
--- Version 1.2
+-- Version 1.1
 --
 -- MIT License
 -- 
@@ -107,19 +107,21 @@ function smoof:update(dt)
         local finished = true
         for key,val in pairs(item.target) do
             -- Smoofing
-            item.object[key] = item.object[key] + (val - item.object[key]) * (1 - (item.smoof_value ^ dt))
-            if type(item.callback["onStep"]) == "function" then
-                item.callback["onStep"](item)
-            end
-            -- Checking if the value is within the threshold
-            if math.abs(item.object[key] - val) > item.completion_threshold then
-                finished = false
-            else
-                item.object[key] = val
-                if type(item.callback["onArrive"]) == "function" then
-                    item.callback["onArrive"](item)
+            if item.object[key] then
+                item.object[key] = item.object[key] + (val - item.object[key]) * (1 - (item.smoof_value ^ dt))
+                if type(item.callback["onStep"]) == "function" then
+                    item.callback["onStep"](item)
                 end
-            end 
+                -- Checking if the value is within the threshold
+                if math.abs(item.object[key] - val) > item.completion_threshold then
+                    finished = false
+                else
+                    item.object[key] = val
+                    if type(item.callback["onArrive"]) == "function" then
+                        item.callback["onArrive"](item)
+                    end
+                end
+            end
         end
         if finished then
             -- Removing from stack if finished
