@@ -1,5 +1,5 @@
 -- Smoof: A tiny tweening library for lua
--- Version 1.1
+-- Version 1.2
 --
 -- MIT License
 -- 
@@ -117,9 +117,6 @@ function smoof:update(dt)
                     finished = false
                 else
                     item.object[key] = val
-                    if type(item.callback["onArrive"]) == "function" then
-                        item.callback["onArrive"](item)
-                    end
                 end
             end
         end
@@ -127,6 +124,9 @@ function smoof:update(dt)
             -- Removing from stack if finished
             if not item.bind then
                 table.remove(self.stack, _)
+                if type(item.callback["onArrive"]) == "function" then
+                    item.callback["onArrive"](item)
+                end
             end
         end
     end
