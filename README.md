@@ -18,7 +18,7 @@ This function starts an animation.
 * target: Another table, Containing the target value/s. Ex: `{x = 32, y = 64}`
 * (Optonal) smoof_value: A number that controls the length of the animation. The lower the number, The faster the animation. Should be in the range of 0 to 1, But not 1. 0.99999... is fine.
 * (Optonal) completion_threshold: This value contols how close to the target the value should get before snapping to it and ending the animation.
-* (Optional) bind: Boolean, If true, The animation will never be removed from the stack (unless you call smoof:unbind()), As a result the object values will constalty animate towards the target.
+* (Optional) bind: Boolean, If true, The animation will never be removed from the stack, As a result the object values will constalty animate towards the target.
 * (Optional) callbacks: A table containing callback functions, One or more of the following: `onStart`, `onStep`, `onArrive`
   * onStart: Called once when the animation starts
   * onStep: Called each frame of the animation.
