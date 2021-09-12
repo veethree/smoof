@@ -12,7 +12,7 @@ value = value + (target - value) * smoothing
 You need to call this function once per frame. It updates the animation.
 'dt' is delta time, Meaning the time that has passed since the last frame in seconds.
 
-### `smoof:tween(object, target, smoof_value, completion_threshold)`
+### `smoof:new(object, target, smoof_value, completion_threshold)`
 This function starts an animation.
 * object: This needs to be a table, Containing the values you want to tween. Ex: `{x = 0, y = 0}`
 * target: Another table, Containing the target value/s. Ex: `{x = 32, y = 64}`
