@@ -86,6 +86,8 @@ function smoof:update(dt)
             -- Checking if the value is within the threshold
             if math.abs(item.object[key] - val) > item.completion_threshold then
                 finished = false
+            else
+                item.object[key] = val
             end 
         end
         if finished then
